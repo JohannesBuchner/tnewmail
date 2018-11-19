@@ -3,6 +3,20 @@ Thunderbird Desktop Notifications
 
 This program gives you popup desktop notifications when thunderbird receives a new email.
 
+---------------------------
+Features of this solution
+---------------------------
+
+1. On new emails, shows standard desktop notifications, containing
+
+  * Mail subject
+  * Sender name
+  * Thunderbird icon
+
+2. Can click notification, which brings up the Thunderbird window
+
+Unfortunately, the Gnome Integration add-on stopped working correctly with Thunderbird 60, and never provided the second feature.
+
 ------------------
 How to set up
 ------------------
@@ -17,7 +31,7 @@ How to set up
 
 	$ python -c 'import multiprocessing, dbus, notify2, gi, argparse, threading'
 
-2. Install the Mailbox Alert extension in Thunderbird
+2. Install the "Mailbox Alert" extension in Thunderbird (Alternatively, you can also use FiltaQuilla)
 3. create a new alert that launches a command for a new email.
 
 The command should be this script, i.e.:
@@ -27,18 +41,6 @@ The command should be this script, i.e.:
 The first argument is the title, the second is the body of the popup
 
 For more placeholders, see https://tjeb.nl/Projects/Mailbox_Alert/Manual/
-
----------------------------
-Features of this solution
----------------------------
-
-* On new emails, shows standard desktop notifications, containing
-
-  * Mail subject
-  * Sender name
-  * Thunderbird icon
-
-* Can click notification, which brings up the Thunderbird window
 
 
 ------------------
