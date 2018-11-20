@@ -13,9 +13,14 @@ Features of this solution
   * Sender name
   * Thunderbird icon
 
-2. Can click notification, which brings up the Thunderbird window
+2. These notifications can be transient or persistant (configurable).
+3. Can click the notification, which brings up the Thunderbird window
 
-Unfortunately, the Gnome Integration add-on stopped working correctly with Thunderbird 60, and never provided the second feature.
+This tool was unfortunately necessary because:
+
+* Thunderbird only gives summaries that disappear after some seconds (not there anymore when returning to computer).
+* A tray icon could show the number of unread mails. But minimizing to tray does not work with Thunderbird 60 or any addons. Additionally the tray is being phased out by GNOME.
+* The Gnome Integration add-on stopped working correctly with Thunderbird 60, and never provided the third feature. Other addons provide non-standard notifications.
 
 ------------------
 How to set up
@@ -42,10 +47,11 @@ The first argument is the title, the second is the body of the popup
 
 For more placeholders, see https://tjeb.nl/Projects/Mailbox_Alert/Manual/
 
+4. Click test to test it (see debugging below).
 
-------------------
-How it works
-------------------
+-------------------------
+How it works internally
+-------------------------
 
 This script runs in two different ways:
 When executed for the first time, it is running as a server, and keeps running.
@@ -57,7 +63,7 @@ It also installs a callback when the notifications are clicked. When clicked,
 it runs thunderbird, which raises the Thunderbird window.
 
 ----------------------------
-Try it out and Debugging
+Try it out and debugging
 ----------------------------
 
 For a dry-run, do this first:
