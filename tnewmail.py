@@ -32,6 +32,7 @@ import os, sys
 import signal, os
 import notify2
 import codecs
+import traceback
 import gi
 gi.require_version('GdkPixbuf', '2.0')
 from gi.repository import GdkPixbuf, GLib
@@ -73,9 +74,9 @@ parser.add_argument('--port', default=15100, type=int,
 
 cmdargs = parser.parse_args()
 
-def sane_encoding(s, default):
+def sane_encoding(s):
 	# remove weird symbols that will cause problems with dbus
-	return codecs.decode(codecs.encode(b, errors='ignore'))
+	return codecs.decode(codecs.encode(s, errors='ignore'))
 
 class NotifyHandler(object):
 	def __init__(self):
@@ -136,8 +137,12 @@ def run_listener(handler):
 		except DBusException as e:
 			print("Warning: showing message failed:", e)
 			pass
-		finally:
+		except Exception as e:
+			print("UNEXPECTED ERROR:")
+			traceback.print_exc()
 			listener.close()
+			# kill process from thread (haha!)
+			os.kill(os.getpid(), signal.SIGKILL)
 			pass
 
 try:
