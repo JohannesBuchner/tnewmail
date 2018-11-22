@@ -31,6 +31,7 @@ from dbus.exceptions import DBusException
 import os, sys
 import signal, os
 import notify2
+import codecs
 import gi
 gi.require_version('GdkPixbuf', '2.0')
 from gi.repository import GdkPixbuf, GLib
@@ -70,9 +71,11 @@ parser.add_argument('--on-click-exec', default='thunderbird', type=str,
 parser.add_argument('--port', default=15100, type=int,
 	help='Port to use for creating the server.')
 
-
 cmdargs = parser.parse_args()
-print(cmdargs)
+
+def sane_encoding(s, default):
+	# remove weird symbols that will cause problems with dbus
+	return codecs.decode(codecs.encode(b, errors='ignore'))
 
 class NotifyHandler(object):
 	def __init__(self):
@@ -99,7 +102,7 @@ class NotifyHandler(object):
 		#mainloop.quit()
 
 	def show_new_message(self, summary, body):
-		msg = notify2.Notification(summary, body)
+		msg = notify2.Notification(sane_encoding(summary), sane_encoding(body))
 		msg.timeout = cmdargs.expire_time
 		if self.icon:
 			msg.set_icon_from_pixbuf(self.icon)
@@ -132,6 +135,9 @@ def run_listener(handler):
 			handler.show_new_message(*msg)
 		except DBusException as e:
 			print("Warning: showing message failed:", e)
+			pass
+		finally:
+			listener.close()
 			pass
 
 try:
